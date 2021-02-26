@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity 0.6.11;
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
+/**
+ * @title Voting
+ * @dev Smart contract de vote
+ */
 contract Voting { 
     struct Voter {
         bool isRegistered;
