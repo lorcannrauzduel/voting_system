@@ -23,23 +23,27 @@ Le gagnant est déterminé à la majorité simple ; la proposition qui obtient l
 
 ## Installation
 
-1) Clonez le repo et installer les dépendances.
+1) Clonez le repo.
 ```sh
 $ git clone https://github.com/lorcannrauzduel/voting_system.git
+```
+
+2) Installez les dépendances.
+```sh
 $ cd voting_system
 $ cd app
 $ npm install
 ```
-2) Configurez les informations concernant votre smart contract dans le fichier app/config/contract.js. (Exemple ci-dessous)
+
+3) Configurez les informations concernant votre smart contract dans le fichier app/config/contract.js. (Exemple ci-dessous)
 ```sh
 rpc_server: 'ws://127.0.0.1:7545',
 contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
 abi: [...]
 ```
-3) Lancez l'application.
 
+4) Lancez l'application.
 ```sh
-$ cd app
 $ node index.js
 ```
 
