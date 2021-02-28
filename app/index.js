@@ -1,3 +1,4 @@
+// Dépendances & config
 const express = require('express');
 const app = express();
 const router = express.Router();
@@ -20,6 +21,15 @@ let isLogin;
 let proposalCount;
 let proposals = [];
 let historical = [];
+let workflow = [
+  "Enregistrements des électeurs",
+  "Enregistrements des propositions",
+  "Fin des enregistrements des propositions",
+  "Enregistrements des votes",
+  "Fin des enregistrements des votes",
+  "Votes comptés"
+];
+let votingStatus;
 
 // Récupère l'adresse du owner
 contractInstance.methods.owner().call().then(function(address) { 
@@ -29,6 +39,11 @@ contractInstance.methods.owner().call().then(function(address) {
 // Accueil
 router.get('/home', function(req, res, next) {
   if(isLogin) {
+
+    // Récupère l'état du vote
+    contractInstance.methods.getVotingStatus().call().then(function(status) { 
+      votingStatus = workflow[(status)];
+    })
 
     // Récupère les propositions
     contractInstance.methods.getProposalCount().call().then(function(count) { 
@@ -63,16 +78,20 @@ router.get('/home', function(req, res, next) {
         }
     });
 
-    res.render('index', { 
-      abi: config.abi,
-      rpcServer :  config.rpc_server,
-      contractAddress : config.contract_address,
-      proposals: proposals,
-      owner: ownerAddress,
-      isOwner: isOwner,
-      isLogin: isLogin,
-      historical: historical
-    });
+    setTimeout(function() {
+      res.render('index', { 
+        abi: config.abi,
+        rpcServer :  config.rpc_server,
+        contractAddress : config.contract_address,
+        proposals: proposals,
+        owner: ownerAddress,
+        isOwner: isOwner,
+        isLogin: isLogin,
+        historical: historical,
+        workflow: votingStatus
+      });
+    }, 1500)
+
     proposals = [];
     historical = [];
   } else {
@@ -83,7 +102,15 @@ router.get('/home', function(req, res, next) {
 // Admin
 router.get('/admin', function(req, res, next) {
   if(isOwner && isLogin) {
-    res.render('admin');
+
+    // Récupère l'état du vote
+    contractInstance.methods.getVotingStatus().call().then(function(status) { 
+      votingStatus = workflow[(status)];
+    })
+
+    res.render('admin', {
+      workflow: votingStatus
+    });
   } else {
     res.redirect('/home');
   }
@@ -128,12 +155,14 @@ router.post('/proposal', function(req, res, next) {
       message: getRevertReason(error.message),
       data: null
     }); 
+    console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Proposition enregistrée",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -151,12 +180,14 @@ router.post('/vote', function(req, res, next) {
       message: "Une erreur est survenue",
       data: null
     }); 
+    console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "A voté",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -174,12 +205,14 @@ router.post('/whitelist', function(req, res, next) {
         message: getRevertReason(error.message),
         data: null
       }); 
+      console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Ajouté à la liste blanche",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -198,12 +231,14 @@ router.post('/start-proposal', function(req, res, next) {
         message: "Une erreur est survenue",
         data: null
       }); 
+      console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Démarrage de la session d'enregistrement des propositions",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -220,12 +255,14 @@ router.post('/end-proposal', function(req, res, next) {
         message: "Une erreur est survenue",
         data: null
       }); 
+      console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Fin de la session d'enregistrement des propositions",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -245,12 +282,14 @@ router.post('/start-vote', function(req, res, next) {
         message: "Une erreur est survenue",
         data: null
       }); 
+      console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Démarrage de la session de vote",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -267,12 +306,14 @@ router.post('/end-vote', function(req, res, next) {
         message: "Une erreur est survenue",
         data: null
       }); 
+      console.log(error);
   }).then( function(tx) { 
       res.json({
         success: true,
         message: "Fin de la session de vote",
         data: tx
       }); 
+      console.log(tx);
   })
 });
 
@@ -288,23 +329,25 @@ router.post('/get-vote', function(req, res, next) {
       })
     }); 
   }
-  // contractInstance.methods.countingVote().send({
-  //   from: user_address,
-  //   gas: 6721975,
-  //   gasPrice: 20000000000
-  // }).on('error', function(error){ 
-  //     res.json({
-  //       success: false,
-  //       message: "Une erreur est survenue",
-  //       data: null
-  //     }); 
-  // }).then( function(tx) { 
-  //     res.json({
-  //       success: true,
-  //       message: "Vote comptabilisé",
-  //       data: tx
-  //     }); 
-  // })
+  contractInstance.methods.countingVote().send({
+    from: user_address,
+    gas: 6721975,
+    gasPrice: 20000000000
+  }).on('error', function(error){ 
+      res.json({
+        success: false,
+        message: "Une erreur est survenue",
+        data: null
+      }); 
+      console.log(error);
+  }).then( function(tx) { 
+      res.json({
+        success: true,
+        message: "Vote comptabilisé",
+        data: tx
+      }); 
+      console.log(tx);
+  })
 });
 
 // Prise en charge du JSON (POST)
