@@ -95,12 +95,25 @@
                 </div>
             </div>
             <div
-            class="tab-pane fade"
+            class="tab-pane fade mb-5"
             id="ex3-pills-2"
             role="tabpanel"
             aria-labelledby="ex3-tab-2"
             >
                 <h2 class="mb-3">Historique</h2>
+                <% for(var i=0; i< historical.length; i++) { %>
+                    <hr>
+                    <div class="card mb-4">
+                        <div class="card-header text-muted"><%= historical[i].timestamp %></div>
+                        <div class="card-body">
+                          <h5 class="card-title"><%= historical[i].voter %> a voté</h5>
+                          <p class="card-text">
+                            <%= historical[i].proposal_title %>
+                          </p>
+                        </div>
+                        <div class="card-footer text-muted">Tx : <%= historical[i].hash %></div>
+                    </div>
+                <% } %>
             </div>
         </div>
     </div>
@@ -115,10 +128,11 @@
             const rpc_server = "<%- rpcServer %>";
             const contract_address = "<%- contractAddress %>";
             const abi = <%- JSON.stringify(abi) %>;
+            const historical = <%- JSON.stringify(historical) %>;
             const web3 = new Web3(new Web3.providers.WebsocketProvider(rpc_server));
             const contractInstance = new web3.eth.Contract(abi, contract_address);
             let account;
-
+            console.log(historical)
             ethereum.enable()
             .then(function (accounts) {
                 account = accounts[0];

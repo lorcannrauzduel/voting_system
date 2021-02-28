@@ -6,6 +6,7 @@ const config = require('./config/contract')
 const Contract = require('web3-eth-contract');
 const Web3 = require('web3');
 const bodyParser = require('body-parser');
+const moment = require('moment');  
 
 // Contrat
 let web3 = new Web3(new Web3.providers.WebsocketProvider(config.rpc_server));
@@ -20,7 +21,6 @@ let proposalCount;
 let proposals = [];
 let historical = [];
 
-
 // Récupère l'adresse du owner
 contractInstance.methods.owner().call().then(function(address) { 
   ownerAddress = address;
@@ -29,6 +29,8 @@ contractInstance.methods.owner().call().then(function(address) {
 // Accueil
 router.get('/home', function(req, res, next) {
   if(isLogin) {
+
+    // Récupère les propositions
     contractInstance.methods.getProposalCount().call().then(function(count) { 
       proposalCount = count;
       for (let i = 0; i < proposalCount; i++) {
@@ -37,6 +39,30 @@ router.get('/home', function(req, res, next) {
         });
       }
     })
+
+    // Récupère l'historique des votes
+    contractInstance.getPastEvents('Voted', {
+      fromBlock: 0,
+      toBlock: 'latest'
+    }).then(function(events){
+        let voted_historical = events;
+        for (let i = 0; i < voted_historical.length; i++) {
+          let proposal_id = voted_historical[i].returnValues.proposalId;
+          contractInstance.methods.getProposal(proposal_id).call().then(function(proposal) { 
+            let proposal_title = proposal[0];
+            web3.eth.getBlock(voted_historical[i].blockNumber).then(function(block) { 
+              let date = block.timestamp
+              historical.push({
+                hash: voted_historical[i].transactionHash,
+                voter: voted_historical[i].returnValues.voter,
+                proposal_title: proposal_title,
+                timestamp: moment(new Date(date*1000)).locale('fr').format('LL')
+              })
+            });
+          });
+        }
+    });
+
     res.render('index', { 
       abi: config.abi,
       rpcServer :  config.rpc_server,
@@ -48,6 +74,7 @@ router.get('/home', function(req, res, next) {
       historical: historical
     });
     proposals = [];
+    historical = [];
   } else {
     res.redirect('/login');
   }
@@ -132,16 +159,6 @@ router.post('/vote', function(req, res, next) {
       }); 
   })
 });
-
-// Event vote
-  // contractInstance.events.Voted()
-  // .on('data', async function(event) {
-  //   historical.push({
-  //     proposal_id: event.returnValues.proposalId,
-  //     voter: event.returnValues.voter
-  //   });
-  // })
-  // .on('error', console.error);
 
 // Ajouter à la whitelist (Admin)
 router.post('/whitelist', function(req, res, next) {
@@ -262,23 +279,32 @@ router.post('/end-vote', function(req, res, next) {
 // Comptabiliser les votes (Admin)
 router.post('/get-vote', function(req, res, next) {
   let user_address = req.body.from;
-  contractInstance.methods.countingVote().send({
-    from: user_address,
-    gas: 6721975,
-    gasPrice: 20000000000
-  }).on('error', function(error){ 
-      res.json({
-        success: false,
-        message: "Une erreur est survenue",
-        data: null
-      }); 
-  }).then( function(tx) { 
-      res.json({
-        success: true,
-        message: "Vote comptabilisé",
-        data: tx
-      }); 
-  })
+  if(isOwner) {
+    res.json({
+      success: true,
+      message: "Les votes ont été comptabilisés",
+      data: proposals.sort(function(a, b) {
+        return b[1] - a[1];
+      })
+    }); 
+  }
+  // contractInstance.methods.countingVote().send({
+  //   from: user_address,
+  //   gas: 6721975,
+  //   gasPrice: 20000000000
+  // }).on('error', function(error){ 
+  //     res.json({
+  //       success: false,
+  //       message: "Une erreur est survenue",
+  //       data: null
+  //     }); 
+  // }).then( function(tx) { 
+  //     res.json({
+  //       success: true,
+  //       message: "Vote comptabilisé",
+  //       data: tx
+  //     }); 
+  // })
 });
 
 // Prise en charge du JSON (POST)

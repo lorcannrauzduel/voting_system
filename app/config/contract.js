@@ -1,6 +1,6 @@
 module.exports = {
     rpc_server: 'ws://127.0.0.1:7545',
-    contract_address : '0xF83Fad2F2cd7f334830E34d86a518F0d9B8927e8',
+    contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
     abi: [
         {
             "anonymous": false,
