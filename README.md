@@ -46,6 +46,7 @@ abi: [...]
 ```sh
 $ node index.js
 ```
+5) Enjoy ;)
 
 ## Technologies
 Solidity, Node.js
