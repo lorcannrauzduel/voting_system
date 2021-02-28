@@ -39,6 +39,7 @@ abi: [...]
 3) Lancez l'application.
 
 ```sh
+$ cd app
 $ node index.js
 ```
 
