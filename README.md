@@ -30,7 +30,7 @@ $ cd voting_system
 $ cd app
 $ npm install
 ```
-2) Configurez les informations concernant votre smart contract dans le fichier app/config/contract.js.
+2) Configurez les informations concernant votre smart contract dans le fichier app/config/contract.js. (Exemple ci-dessous)
 ```sh
 rpc_server: 'ws://127.0.0.1:7545',
 contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
@@ -46,4 +46,6 @@ $ node index.js
 Solidity, Node.js
 
 ## Auteur
-Lorcann RAUZDUEL, Arnaud DAUBER--NATALI, Michael LOUISET
+- Lorcann RAUZDUEL
+- Arnaud DAUBER--NATALI
+- Michael LOUISET
