@@ -32,13 +32,9 @@ $ npm install
 ```
 2) Configurez les informations concernant votre smart contract dans le fichier app/config/contract.js.
 ```sh
-**Exemple de configuration**
-
-module.exports = {
-    rpc_server: 'ws://127.0.0.1:7545',
-    contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
-    abi: [...]
-}
+rpc_server: 'ws://127.0.0.1:7545',
+contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
+abi: [...]
 ```
 3) Lancez l'application.
 
