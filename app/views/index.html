@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VotingSystem | Accueil</title>
-    
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
 
@@ -207,7 +207,7 @@
             .on('data', async function(event){
                 let proposal_id = event.returnValues.proposalId;
                 contractInstance.methods.getProposal(proposal_id).call().then(function(proposal) { 
-                    let html = '<div class="card"><div class="card-body"><h5 class="card-title">'+proposal[0]+'</h5><div></div><button type="button" class="btn btn-primary btn-add-vote mt-1" data-id="'+proposal_id+'"><i class="fas fa-thumbs-up"></i><span class="badge bg-danger ms-2" id="count-vote-'+proposal_id+'">'+proposal[1]+'</span></button></div></div>'
+                    let html = '<div class="card"><div class="card-body"><h5 class="card-title">'+proposal[0]+'</h5><div></div><hr><button type="button" class="alert alert-light btn-add-vote m-0 p-0" data-id="'+proposal_id+'"><i class="fas fa-thumbs-up fa-lg"></i><span class="badge bg-danger ms-2" id="count-vote-'+proposal_id+'">'+proposal[1]+'</span></button></div></div>'
                     $('#list-proposals').prepend(html)
                 });
             })
