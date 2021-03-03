@@ -48,7 +48,9 @@ $ node index.js
 ```
 5) Déplacer le dossier client sur un serveur web (exemple: WAMP)
 
-6) Go sur localhost/client/login.php
+6) Go sur **localhost/client/login.php** pour tester.
+
+7) Enjoy ;)
 
 ## Technologies
 - Solidity (Smart Contract)
