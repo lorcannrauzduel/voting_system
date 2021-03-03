@@ -119,8 +119,15 @@ contract Voting is Ownable {
         emit VotingSessionEnded();
     }
     
-    function setWinningProposal(uint _proposalId) external onlyOwner returns(uint) {
-        winingProposalId = _proposalId;
+    function getWinningProposal()  public view returns (uint _proposalId)
+    {
+        uint winnerVoteCount = 0;
+        for (uint i = 0; i < proposals.length; i++) {
+            if (proposals[i].voteCount > winnerVoteCount) {
+                winnerVoteCount = proposals[i].voteCount;
+                _proposalId = i;
+            }
+        }
         return _proposalId;
     }
     
