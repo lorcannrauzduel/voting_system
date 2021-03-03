@@ -118,23 +118,6 @@ contract Voting is Ownable {
         emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted, WorkflowStatus.VotingSessionEnded);
         emit VotingSessionEnded();
     }
-
-/*    
-    function countingVote() public onlyOwner returns(uint){
-        require(votingStatus == WorkflowStatus.VotingSessionEnded, "the vote Registration is not finished");
-        uint i = 0;
-        uint j = proposals.length-1;
-        while (i!=j) {
-            if (proposals[i].voteCount >= proposals[j].voteCount) {
-                j--;
-            } i++;
-        }
-        votingStatus = WorkflowStatus.VotesTallied;
-        emit WorkflowStatusChange(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
-        emit VotesTallied();
-        return winingProposalId = i;
-    }
-*/
     
     function setWinningProposal(uint _proposalId) external onlyOwner returns(uint) {
         winingProposalId = _proposalId;
