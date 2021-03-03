@@ -1,6 +1,6 @@
 module.exports = {
     rpc_server: 'ws://127.0.0.1:7545',
-    contract_address : '0xe661fe01f4964fb54DC31857C77f5B45d2F1b390',
+    contract_address : '0x75c3dc1c7942F38584901aE418ca4641418C1704',
     abi: [
         {
             "anonymous": false,
@@ -233,30 +233,6 @@ module.exports = {
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "proposalId",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "description",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "voteCount",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
                     "name": "CoolDown",
                     "type": "uint256"
                 }
@@ -283,6 +259,30 @@ module.exports = {
             "name": "proposalSuggestion",
             "outputs": [],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "proposals",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "voteCount",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -351,11 +351,21 @@ module.exports = {
                     "type": "address"
                 }
             ],
-            "name": "voterId",
+            "name": "voters",
             "outputs": [
                 {
+                    "internalType": "bool",
+                    "name": "isRegistered",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "hasVoted",
+                    "type": "bool"
+                },
+                {
                     "internalType": "uint256",
-                    "name": "",
+                    "name": "votedProposalId",
                     "type": "uint256"
                 }
             ],

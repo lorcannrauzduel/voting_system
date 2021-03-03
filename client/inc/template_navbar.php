@@ -19,6 +19,7 @@
                 </li>
             </ul>
           </div>
+          <?php if(!$$loginPage): ?>
           <div class="d-flex input-group w-auto">
             <button
               class="btn btn-primary btn-rounded"
@@ -28,5 +29,6 @@
               Se connecter à MetaMask
             </button>
           </div>
+          <?php endif; ?>
         </div>
     </nav>

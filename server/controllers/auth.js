@@ -1,7 +1,6 @@
-const contractInstance = require('../config/init');
-const storage = require('../config/storage');
-const config = require('../config/contract')
-
+const contractInstance = require('../contract/instance').contractInstance;
+const config = require('../contract/instance').config;
+const storage = require('../storage/app');
 module.exports = {
     get: function(req, res) {
         if(storage.isLogin) {

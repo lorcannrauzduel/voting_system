@@ -1,3 +1,4 @@
+<?php  $title = 'Voting System | Login'; $isLogin = true; ?>
 <?php include 'inc/template_start.php'; ?>
 <?php include 'inc/template_navbar.php'; ?>
 
@@ -27,7 +28,9 @@
                     .then(function (accounts) {
                         account = accounts[0];
                         login(account);
-                        // window.location.href = 'index.php';
+                        setTimeout(function() {
+                            window.location.href = 'index.php'
+                        }, 2000);
                     })
                     .catch(function (error) {
                         console.error(error);

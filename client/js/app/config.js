@@ -1,5 +1,5 @@
 const endpoint = {
-    local: 'http://localhost:8000/'
+    local: 'http://localhost:3000/'
 };
 
 const api_url = endpoint.local;

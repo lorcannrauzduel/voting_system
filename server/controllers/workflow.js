@@ -1,5 +1,5 @@
-const contractInstance = require('../config/init');
-const storage = require('../config/storage');
+const contractInstance = require('../contract/instance').contractInstance;
+const storage = require('../storage/app');
     
 module.exports = {
     get: function(req, res) {

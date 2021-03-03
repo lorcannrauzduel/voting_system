@@ -1,5 +1,7 @@
-const contractInstance = require('../config/init');
-const storage = require('../config/storage');
+const contractInstance = require('../contract/instance').contractInstance;
+const web3 = require('../contract/instance').web3;
+const storage = require('../storage/app');
+const moment = require('moment');
 
 module.exports = {
     all: function(req, res) {
@@ -9,23 +11,23 @@ module.exports = {
         }).then(function(events){
             let voted_historical = events;
             for (let i = 0; i < voted_historical.length; i++) {
-
                 let proposal_id = voted_historical[i].returnValues.proposalId;
-                contractInstance.methods.getProposal(proposal_id).call().then(function(proposal) { 
 
+                contractInstance.methods.getProposal(proposal_id).call().then(function(proposal) { 
                     let proposal_title = proposal[0];
+
                     web3.eth.getBlock(voted_historical[i].blockNumber).then(function(block) { 
+
                         let date = block.timestamp
                         storage.historical.push({
-                        hash: voted_historical[i].transactionHash,
-                        voter: voted_historical[i].returnValues.voter,
-                        proposal_title: proposal_title,
-                        timestamp: moment(new Date(date*1000)).locale('fr').format('LL')
+                          hash: voted_historical[i].transactionHash,
+                          voter: voted_historical[i].returnValues.voter,
+                          proposal_title: proposal_title,
+                          timestamp: moment(new Date(date*1000)).locale('fr').format('LL')
                         })
                     });
 
                 });
-
             }
         });
         res.json({
@@ -33,6 +35,7 @@ module.exports = {
             message: 'Liste des votes',
             data: storage.historical
         }); 
+        storage.historical = [];
     },
     add: function(req, res) {
         let user_address = req.body.from;

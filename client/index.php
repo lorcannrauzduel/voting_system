@@ -1,3 +1,4 @@
+<?php  $title = 'Voting System | Accueil';  ?>
 <?php include 'inc/template_start.php'; ?>
 <?php include 'inc/template_navbar.php'; ?>
 
