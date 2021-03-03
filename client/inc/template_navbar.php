@@ -19,7 +19,7 @@
                 </li>
             </ul>
           </div>
-          <?php if(!$$loginPage): ?>
+          <?php if(!$loginPage): ?>
           <div class="d-flex input-group w-auto">
             <button
               class="btn btn-primary btn-rounded"
