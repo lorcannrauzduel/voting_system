@@ -21,41 +21,8 @@ Le gagnant est déterminé à la majorité simple ; la proposition qui obtient l
 - L'administrateur du vote comptabilise les votes.
 - Tout le monde peut vérifier les derniers détails de la proposition gagnante.
 
-## Installation
-
-1) Clonez le repo.
-```sh
-$ git clone https://github.com/lorcannrauzduel/voting_system.git
-```
-
-2) Installez les dépendances.
-```sh
-$ cd voting_system
-$ cd server
-$ npm install
-```
-
-3) Configurez les informations concernant votre smart contract dans le fichier **server/contract/config.js**. (Exemple ci-dessous)
-```sh
-rpc_server: 'ws://127.0.0.1:7545',
-contract_address : '0x08F9752d586C30F51586077c35a0ee3367d6eE0f',
-abi: [...]
-```
-
-4) Lancez l'application.
-```sh
-$ node index.js
-```
-5) Déplacer le dossier client sur un serveur web (exemple: WAMP).
-
-6) Go sur **localhost/client/login.php** pour tester.
-
-7) Enjoy ;)
-
 ## Technologies
 - Solidity (Smart Contract)
-- Node.js (API)
-- HTML, CSS, jQuery, Mustache (Front)
 
 ## Auteur
 - Lorcann RAUZDUEL
