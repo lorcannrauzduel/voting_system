@@ -175,7 +175,7 @@ contract Voting is Ownable {
      * @return voteCount Nombre de vote 
      */
     function getWinningInfo() public view returns (string memory description, uint voteCount) {
-        require(winningProposalId != 0, "Les votes n'ont pas encore été comptabilisés");
+        require(winningProposalId != 0, "Aucune proposition gagnante");
         return (proposals[winningProposalId].description, proposals[winningProposalId].voteCount);
     }
 }
