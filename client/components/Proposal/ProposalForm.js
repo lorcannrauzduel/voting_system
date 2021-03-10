@@ -1,7 +1,8 @@
 import React, { useState }  from 'react'
-import { Form } from 'semantic-ui-react'
+import { Form, Icon } from 'semantic-ui-react'
 import WhitelistForm from '../Whitelist/WhitelistForm';
 import { useToasts } from 'react-toast-notifications';
+import getMessageError from '../../utils/getMessageError';
 
 const ProposalForm = (props) => {
     const [proposal, setProposal] = useState();
@@ -11,13 +12,14 @@ const ProposalForm = (props) => {
         setProposal(proposal)
         await props.contract.methods.addProposal(proposal).send({ 
             from: props.accounts[0]
-        }).on('error', function(error){ 
-            addToast('Une erreur est survenue!', { appearance: 'error', autoDismiss: true });
+        }).on('error', function(error){      
+            let message = getMessageError(error);                    
+            addToast(message, { appearance: 'error', autoDismiss: true });
         }).then((result) => {
             let id = result.events.ProposalRegistered.returnValues.proposalId; 
             props.contract.methods.getProposal(id).call()
             .then((proposal) => { 
-                // props.onAddProposal(proposal);  
+                props.onAddProposal(proposal);  
                 addToast('Proposition enregistrée', { appearance: 'success', autoDismiss: true });
             });
         })
@@ -32,7 +34,8 @@ const ProposalForm = (props) => {
         await props.contract.methods.startProposalsRegistration(60).send({ 
             from: props.accounts[0] 
         }).on('error', function(error){ 
-            addToast('Une erreur est survenue!', { appearance: 'error', autoDismiss: true });
+            let message = getMessageError(error);                    
+            addToast(message, { appearance: 'error', autoDismiss: true });
         }).then(function(tx) { 
             addToast('Démarrage de la session d\'enregistrement des propositions', { appearance: 'success', autoDismiss: true });
         })
@@ -42,7 +45,8 @@ const ProposalForm = (props) => {
         await props.contract.methods.closeProposalsRegistration().send({ 
             from: props.accounts[0] 
         }).on('error', function(error){ 
-            addToast('Une erreur est survenue!', { appearance: 'error', autoDismiss: true });
+            let message = getMessageError(error);                    
+            addToast(message, { appearance: 'error', autoDismiss: true });
         }).then(function(tx) { 
             addToast('Fin de la session d\'enregistrement des propositions', { appearance: 'success', autoDismiss: true });
         })
@@ -59,10 +63,12 @@ const ProposalForm = (props) => {
             </Form>
             
             <Form onSubmit={addProposal}>
-                <Form.TextArea label='Publier une proposition' placeholder='Description...' onChange={handleProposalChange}/>
-                <Form.Group>
-                    <Form.Button basic color="blue">Publier</Form.Button>
-                </Form.Group>
+                <Form.Input 
+                    icon={<Icon name='send' color="blue" inverted circular link onClick={addProposal} />} 
+                    label='Publier une proposition' 
+                    placeholder='Description...' 
+                    onChange={handleProposalChange}
+                />
             </Form>
         </div>
     )

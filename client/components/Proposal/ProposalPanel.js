@@ -13,26 +13,26 @@ const ProposalPanel = (props) => {
     useEffect(() => { 
         getProposals();
         
-        contract.events.Voted()
-        .on('data', async (event) => {
-            let proposal_id = event.returnValues.proposalId;
-            let voter = event.returnValues.voter;
-            contract.methods.getProposal(proposal_id).call()
-            .then((proposal) => { 
-             //handleVote(proposal_id)
-              addToast('Nouveau vote : '+voter + ' a voté pour : ' + proposal[1], { appearance: 'success', autoDismiss: true });
-          });
-        })
+        // contract.events.Voted()
+        // .on('data', async (event) => {
+        //     let proposal_id = event.returnValues.proposalId;
+        //     let voter = event.returnValues.voter;
+        //     contract.methods.getProposal(proposal_id).call()
+        //     .then((proposal) => { 
+        //      //handleVote(proposal_id)
+        //       addToast('Nouveau vote : '+voter + ' a voté pour : ' + proposal[1], { appearance: 'success', autoDismiss: true });
+        //   });
+        // })
         
-        contract.events.ProposalRegistered()
-        .on('data', async (event) => {
-            let proposal_id = event.returnValues.proposalId;
-            contract.methods.getProposal(proposal_id).call()
-            .then((proposal) => { 
-              handleProposal(proposal);
-              addToast('Nouvelle proposition : '+proposal[1]+' ', { appearance: 'success', autoDismiss: true });
-          });
-        })
+        // contract.events.ProposalRegistered()
+        // .on('data', async (event) => {
+        //     let proposal_id = event.returnValues.proposalId;
+        //     contract.methods.getProposal(proposal_id).call()
+        //     .then((proposal) => { 
+        //       //handleProposal(proposal);
+        //       addToast('Nouvelle proposition : '+proposal[1]+' ', { appearance: 'success', autoDismiss: true });
+        //   });
+        // })
     }, [])
       
     const getProposals = async() => {
@@ -75,9 +75,9 @@ const ProposalPanel = (props) => {
         <div>
         <ProposalForm contract={contract} accounts={accounts} onAddProposal={handleProposal} />
         <Comment.Group>
-        <Header as='h3' dividing>
-          Liste des propositions
-        </Header>
+          <Header as='h3' dividing>
+            Liste des propositions
+          </Header>
           {proposals.map((proposal, index) =>
             <ProposalItem key={index} item={proposal} contract={contract} accounts={accounts} onVoteProposal={handleVote}/>
           )}

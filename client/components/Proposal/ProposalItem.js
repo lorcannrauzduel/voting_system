@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon, Label, Comment, Button } from 'semantic-ui-react'
 import { useToasts } from 'react-toast-notifications';
+import getMessageError from '../../utils/getMessageError';
 
 const ProposalItem = (props) => {
     const { addToast } = useToasts()
@@ -9,7 +10,8 @@ const ProposalItem = (props) => {
         await props.contract.methods.addVote(proposalId).send({ 
             from: props.accounts[0] 
         }).on('error', function(error){ 
-            addToast('Une erreur est survenue!', { appearance: 'error', autoDismiss: true });
+            let message = getMessageError(error);                    
+            addToast(message, { appearance: 'error', autoDismiss: true });
         }).then(function(result) { 
             addToast('Merci pour votre vote!', { appearance: 'success', autoDismiss: true });
             let id = result.events.Voted.returnValues.proposalId;

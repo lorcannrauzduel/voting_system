@@ -2,6 +2,7 @@
 import React, { useState }  from 'react'
 import { Header, Button, Icon, Modal, Form } from 'semantic-ui-react'
 import { useToasts } from 'react-toast-notifications';
+import getMessageError from '../../utils/getMessageError';
 
 const WhitelistForm = (props) => {
     const [address, setAddresses] = useState();
@@ -13,7 +14,8 @@ const WhitelistForm = (props) => {
         props.contract.methods.addWhiteList(address).send({ 
             from: props.accounts[0] 
         }).on('error', function(error){ 
-            addToast('Une erreur est survenue!', { appearance: 'error', autoDismiss: true });
+            let message = getMessageError(error);
+            addToast(message, { appearance: 'error', autoDismiss: true });
         }).then(function(tx) { 
             addToast('Ajouté à la liste blanche', { appearance: 'success', autoDismiss: true });
         })
@@ -27,10 +29,10 @@ const WhitelistForm = (props) => {
         <Modal
             closeIcon
             open={open}
-            trigger={<Form.Button>Ajouter à liste blanche</Form.Button>}
+            trigger={<Form.Button basic color="blue">Ajouter à liste blanche</Form.Button>}
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
-            >
+        >
             <Header content='Ajouter à liste blanche' />
             <Modal.Content>
                 <Form>

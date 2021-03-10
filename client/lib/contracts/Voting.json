@@ -12562,12 +12562,12 @@
         }
       },
       "links": {},
-      "address": "0xb6374c29dE65804c64746d74142aE5eFE7dCDDCA",
-      "transactionHash": "0xb14e2b01433c49e1152023d99b9fa18e4db5a28bddbab79e39d2f9447f9bfbb1"
+      "address": "0x1b80b90F68423Cf6A86DCd7D2cec40d8B68A6b6D",
+      "transactionHash": "0x54019fda12840f08babf139c3da8b71fbfb8776a2d0648718d7128e7a5f9fc18"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-03-09T21:10:58.395Z",
+  "updatedAt": "2021-03-10T18:04:59.804Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Smart contract de vote",
