@@ -24,9 +24,7 @@ class Home extends Component {
             const accounts = await web3.eth.getAccounts()
             this.setState({ web3, accounts })
         } catch (error) {
-            alert(
-              `La connexion à MetaMask a échoué.`
-            )
+            console.log(error)
         }
 
         window.ethereum.on('accountsChanged', (accounts) => {
@@ -42,7 +40,7 @@ class Home extends Component {
               <Segment textAlign='center'>
                 <Header as='h1'>Bienvenue sur notre système de vote décentralisé!</Header>
                 <Image centered src={'./images/login.jpg'} size='large' />
-                <Link href={this.state.accounts.length > 0 ? "/proposals" : "" }><Button content={this.state.accounts.length > 0 ? "Poursuivre" : "Vous n'êtes pas connecté"} color="red" /></Link>
+                <Link href={this.state.accounts.length > 0 ? "/proposals" : "" }><Button basic content={this.state.accounts.length > 0 ? "Poursuivre" : "Vous n'êtes pas connecté"} color="red" /></Link>
               </Segment>
             </Grid.Column>
           </Grid>
