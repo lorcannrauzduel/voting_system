@@ -74,7 +74,7 @@ contract Voting is Ownable {
      * @param CoolDown Durée de la session d'enregistrement
      */
     function startProposalsRegistration(uint CoolDown) public onlyOwner returns(uint){
-        require(votingStatus == WorkflowStatus.RegisteringVoters, "Les électeurs n'ont pas été enregistrés");
+        // require(votingStatus == WorkflowStatus.RegisteringVoters, "Les électeurs n'ont pas été enregistrés");
         endRegistrationDate = block.timestamp + CoolDown;
         votingStatus = WorkflowStatus.ProposalsRegistrationStarted;
         emit WorkflowStatusChange(WorkflowStatus.RegisteringVoters, WorkflowStatus.ProposalsRegistrationStarted);
@@ -88,8 +88,8 @@ contract Voting is Ownable {
      * @param description Description de la proposition
      */
     function addProposal(string memory description) public registred {
-        require(votingStatus == WorkflowStatus.ProposalsRegistrationStarted, "La session d'enregistrement des propositions n'a pas commencé");
-        require(block.timestamp < endRegistrationDate, "La session d'enregistrement des propositions est terminé");
+        // require(votingStatus == WorkflowStatus.ProposalsRegistrationStarted, "La session d'enregistrement des propositions n'a pas commencé");
+        // require(block.timestamp < endRegistrationDate, "La session d'enregistrement des propositions est terminé");
         proposals.push(Proposal(description,0));
         uint id = proposals.length-1; 
         emit ProposalRegistered(id);
@@ -99,8 +99,8 @@ contract Voting is Ownable {
      * @dev Mettre fin à la session d'enregistrement des propositions
      */
     function closeProposalsRegistration() public onlyOwner {
-        require(votingStatus == WorkflowStatus.ProposalsRegistrationStarted, "La session d'enregistrement des propositions n'a pas commencé");
-        require(block.timestamp >= endRegistrationDate, "La session d'enregistrement des propositions n'est pas terminé");
+        // require(votingStatus == WorkflowStatus.ProposalsRegistrationStarted, "La session d'enregistrement des propositions n'a pas commencé");
+        // require(block.timestamp >= endRegistrationDate, "La session d'enregistrement des propositions n'est pas terminé");
         votingStatus = WorkflowStatus.ProposalsRegistrationEnded;
         emit WorkflowStatusChange(WorkflowStatus.ProposalsRegistrationStarted, WorkflowStatus.ProposalsRegistrationEnded);
         emit ProposalsRegistrationEnded();
@@ -112,7 +112,7 @@ contract Voting is Ownable {
      * @return uint Nombre de vote 
      */
     function startVotingSession(uint Cooldown) public onlyOwner returns(uint){
-        require(votingStatus == WorkflowStatus.ProposalsRegistrationEnded, "La session d'enregistrement des propositions n'est pas terminée");
+        // require(votingStatus == WorkflowStatus.ProposalsRegistrationEnded, "La session d'enregistrement des propositions n'est pas terminée");
         endVoteDate = block.timestamp + Cooldown;
         votingStatus = WorkflowStatus.VotingSessionStarted;
         emit WorkflowStatusChange(WorkflowStatus.ProposalsRegistrationEnded, WorkflowStatus.VotingSessionStarted);
@@ -126,8 +126,8 @@ contract Voting is Ownable {
      * @return uint Nombre de vote 
      */
     function addVote(uint _proposalId) public returns (uint){
-        require(votingStatus == WorkflowStatus.VotingSessionStarted, "La session de vote n'a pas commencé");
-        require(voters[msg.sender].hasVoted == false, "Vous avez déjà voté");
+        // require(votingStatus == WorkflowStatus.VotingSessionStarted, "La session de vote n'a pas commencé");
+        // require(voters[msg.sender].hasVoted == false, "Vous avez déjà voté");
         proposals[_proposalId].voteCount++;
         voters[msg.sender] = Voter(true, true, _proposalId);
         emit Voted (msg.sender, _proposalId);
@@ -138,8 +138,8 @@ contract Voting is Ownable {
      * @dev Mettre fin à la session de vote
      */
     function closeVotingSession() public onlyOwner {
-        require(block.timestamp >= endVoteDate, "La session de vote n'est pas terminée");
-        require(votingStatus == WorkflowStatus.VotingSessionStarted, "La session de vote n'a pas commencé");
+        // require(block.timestamp >= endVoteDate, "La session de vote n'est pas terminée");
+        // require(votingStatus == WorkflowStatus.VotingSessionStarted, "La session de vote n'a pas commencé");
         votingStatus = WorkflowStatus.VotingSessionEnded;
         emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted, WorkflowStatus.VotingSessionEnded);
         emit VotingSessionEnded();
@@ -176,5 +176,24 @@ contract Voting is Ownable {
     function getWinningInfo() public view returns (string memory description, uint voteCount) {
         require(winningProposalId != 0, "Aucune proposition gagnante");
         return (proposals[winningProposalId].description, proposals[winningProposalId].voteCount);
+    }
+    
+    /**
+     * @dev Récupère le nombre de propositions
+     * @return uint Nombre de propositions
+    */
+    function getProposalCount() public view returns(uint) {
+        return proposals.length;
+    }
+        
+    /**
+     * @dev Récupère les informations concernant une proposition
+     * @param index ID de la proposition
+     * @return uint ID
+     * @return string Description
+     * @return uint Nombre de votes
+    */
+    function getProposal(uint index) public view returns(uint, string memory, uint) {
+        return (index, proposals[index].description, proposals[index].voteCount);
     }
 }
